@@ -1,6 +1,7 @@
 package electronicstorage.BussinesLogic;
 
 import electronicstorage.Models.ElementEntity;
+import electronicstorage.Models.ElementModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import electronicstorage.Repository.IElementRepository;
@@ -39,5 +40,13 @@ public class ElementService implements IElementService {
         }
 
         return allElements;
+    }
+
+    public void AddNewElement(ElementModel element){
+        boolean isAdded = _elementRepository.CreateNewElement(element);
+
+        if(!isAdded){
+            System.out.println("Element " + element.code + "was not added, error ocured.");
+        }
     }
 }

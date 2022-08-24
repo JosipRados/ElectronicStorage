@@ -1,6 +1,7 @@
 package electronicstorage.Repository;
 
 import electronicstorage.Models.ElementEntity;
+import electronicstorage.Models.ElementModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class ElementRepository implements IElementRepository {
             }
     }
     @Override
-    public boolean CreateNewElement(ElementEntity element){
+    public boolean CreateNewElement(ElementModel element){
         CallableStatement newStatement;
         String procedure = "{call spSetNewElement (?, ?, ?, ?, ?, ?)}";
         try{
