@@ -1,25 +1,25 @@
-package repository;
+package electronicstorage.Repository;
 
-import Models.ElementEntity;
-import lombok.AllArgsConstructor;
+import electronicstorage.Models.ElementEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 public class ElementRepository implements IElementRepository {
-    public DataAccess dataAccess;
+    public DataAccess _dataAccess = new DataAccess();
+
+
     @Override
     public ResultSet GetAllElements(){
             CallableStatement newStatement;
             String procedure = "{call spGetElements}";
             try{
-                newStatement = dataAccess.databaseConnection.prepareCall(procedure);
+                newStatement = _dataAccess.databaseConnection.prepareCall(procedure);
                 newStatement.execute();
                 return newStatement.getResultSet();
             }
@@ -33,7 +33,7 @@ public class ElementRepository implements IElementRepository {
         CallableStatement newStatement;
         String procedure = "{call spSetNewElement (?, ?, ?, ?, ?, ?)}";
         try{
-            newStatement = dataAccess.databaseConnection.prepareCall(procedure);
+            newStatement = _dataAccess.databaseConnection.prepareCall(procedure);
             newStatement.setString(1, element.code);
             newStatement.setString(2, element.value);
             newStatement.setString(3, element.unit);
@@ -53,7 +53,7 @@ public class ElementRepository implements IElementRepository {
         CallableStatement newStatement;
         String procedure = "{call spUpdateElement (?, ?, ?, ?, ?, ?, ?)}";
         try{
-            newStatement = dataAccess.databaseConnection.prepareCall(procedure);
+            newStatement = _dataAccess.databaseConnection.prepareCall(procedure);
             newStatement.setLong(1, element.id);
             newStatement.setString(2, element.code);
             newStatement.setString(3, element.value);
@@ -74,7 +74,7 @@ public class ElementRepository implements IElementRepository {
         CallableStatement newStatement;
         String procedure = "{call spDeleteElement (?)}";
         try{
-            newStatement = dataAccess.databaseConnection.prepareCall(procedure);
+            newStatement = _dataAccess.databaseConnection.prepareCall(procedure);
             newStatement.setLong(1, elementId);
 
             newStatement.execute();

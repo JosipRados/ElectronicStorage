@@ -1,7 +1,6 @@
-package repository;
+package electronicstorage.Repository;
 
-import Models.ElementEntity;
-import org.springframework.stereotype.Component;
+import electronicstorage.Models.ElementEntity;
 
 import java.sql.ResultSet;
 

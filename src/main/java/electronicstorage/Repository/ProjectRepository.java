@@ -1,7 +1,9 @@
-package repository;
+package electronicstorage.Repository;
 
-import Models.ProjectEntity;
-import Models.ProjectModel;
+import electronicstorage.Models.ProjectEntity;
+import electronicstorage.Models.ProjectModel;
+import electronicstorage.Repository.DataAccess;
+import electronicstorage.Repository.IProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

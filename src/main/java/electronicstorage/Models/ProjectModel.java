@@ -1,4 +1,4 @@
-package Models;
+package electronicstorage.Models;
 
 public class ProjectModel {
     public String name;
