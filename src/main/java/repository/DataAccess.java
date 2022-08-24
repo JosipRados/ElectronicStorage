@@ -1,14 +1,17 @@
 package repository;
 
+import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DataAccess {
+@Component
+public class DataAccess implements IDataAccess {
     private static final String jdbcDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private static final String jdbcURL = "jdbc:sqlserver://localhost:1433;databasename=Electronic_Storage;username=test;password=test01;trustServerCertificate=true;";
     public static Connection databaseConnection = null;
 
-    public static void ConnectToDatabase(){
+    @Override
+    public void ConnectToDatabase(){
 
         try
         {
