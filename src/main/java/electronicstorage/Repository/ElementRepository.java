@@ -2,12 +2,9 @@ package electronicstorage.Repository;
 
 import electronicstorage.Models.ElementEntity;
 import electronicstorage.Models.ElementModel;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 
 @Component
@@ -55,7 +52,7 @@ public class ElementRepository implements IElementRepository {
         String procedure = "{call spUpdateElement (?, ?, ?, ?, ?, ?, ?)}";
         try{
             newStatement = _dataAccess.databaseConnection.prepareCall(procedure);
-            newStatement.setLong(1, element.id);
+            newStatement.setLong(1, element.elementId);
             newStatement.setString(2, element.code);
             newStatement.setString(3, element.value);
             newStatement.setString(4, element.unit);
@@ -83,6 +80,21 @@ public class ElementRepository implements IElementRepository {
         }
         catch(Exception ex){
             return false;
+        }
+    }
+    @Override
+    public ResultSet GetOneElement(long elementId){
+        CallableStatement newStatement;
+        String procedure = "{call spGetElementById (?)}";
+        try{
+            newStatement = _dataAccess.databaseConnection.prepareCall(procedure);
+            newStatement.setLong(1, elementId);
+
+            newStatement.execute();
+            return newStatement.getResultSet();
+        }
+        catch(Exception ex){
+            return null;
         }
     }
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElementEntity {
-    public long id;
+    public long elementId;
     public String code;
     public String value;
     public String unit;
@@ -14,12 +14,12 @@ public class ElementEntity {
     public String size;
     public String comment;
 
-    public long getId() {
-        return id;
+    public long getElementId() {
+        return elementId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setElementId(long elementId) {
+        this.elementId = elementId;
     }
 
     public String getCode() {

@@ -14,4 +14,6 @@ public interface IElementRepository {
     boolean UpdateElement(ElementEntity element);
 
     boolean DeleteElement(long elementId);
+
+    ResultSet GetOneElement(long elementId);
 }
