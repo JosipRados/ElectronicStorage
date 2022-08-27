@@ -1,5 +1,6 @@
-package electronicstorage.Models;
+package electronicstorage.UI.Models;
 
+import electronicstorage.Repository.Models.ElementEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -9,15 +10,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageModel {
-    public List<ElementEntity> pageElements = new ArrayList<ElementEntity>();
+    public List<ElementModel> pageElements = new ArrayList<ElementModel>();
     public boolean noNext;
     public boolean noPrevious;
 
-    public List<ElementEntity> getPageElements() {
+    public List<ElementModel> getPageElements() {
         return pageElements;
     }
 
-    public void setPageElements(List<ElementEntity> pageElements) {
+    public void setPageElements(List<ElementModel> pageElements) {
         this.pageElements = pageElements;
     }
 

@@ -1,4 +1,4 @@
-package electronicstorage.Models;
+package electronicstorage.Repository.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

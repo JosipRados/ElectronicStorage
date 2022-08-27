@@ -1,6 +1,6 @@
 package electronicstorage;
 
-import electronicstorage.Repository.DataAccess;
+import electronicstorage.Repository.DataAccessImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,8 +12,8 @@ public class ElectronicStorageApplication  {
     public static void main(String[] args) {
 
         SpringApplication.run(ElectronicStorageApplication.class, args);
-        DataAccess dataAccess = new DataAccess();
-        dataAccess.ConnectToDatabase();
+        DataAccessImpl dataAccessImpl = new DataAccessImpl();
+        dataAccessImpl.ConnectToDatabase();
     }
 
 

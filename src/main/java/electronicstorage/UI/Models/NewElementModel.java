@@ -1,11 +1,11 @@
-package electronicstorage.Models;
+package electronicstorage.UI.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElementModel {
+public class NewElementModel {
     public String code;
     public String value;
     public String unit;
