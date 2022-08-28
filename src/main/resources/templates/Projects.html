@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Projects Page</title>
@@ -14,6 +14,31 @@
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 </head>
 <body>
+    <div class="container">
+        <div class="row">
+
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Project Name</th>
+                <th>Company Name</th>
+                <th>Date Added</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="project: ${Projects}">
+                <td th:text="${project.name}"></td>
+                <td th:text="${project.company}"></td>
+                <td th:text="${project.timeStamp}"></td>
+                <td>
+                    <a class="btn btn-warning" th:href="@{/projects/{id}(id = ${project.id})}">DETAILS</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </body>
 </html>

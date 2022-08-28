@@ -1,5 +1,6 @@
 package electronicstorage.BussinesLogic;
 
+import electronicstorage.Repository.ErrorLogRepository;
 import electronicstorage.Repository.Models.ElementEntity;
 import electronicstorage.UI.Models.ElementModel;
 import electronicstorage.UI.Models.NewElementModel;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ElementServiceImpl implements ElementService {
     public final ElementRepository _elementRepository;
     public final MappingElements _mappingElements;
+    public final ErrorLogRepository _errorLogRepository;
 
     @Override
     public List<ElementModel> GetAllElements(){
@@ -26,16 +28,20 @@ public class ElementServiceImpl implements ElementService {
             return _mappingElements.MappingElementEntityToModel(dbElements);
         }
         catch(Exception ex){
-            System.out.println("Couldn't get all elements, ERR: " + ex.getMessage());
+            _errorLogRepository.WriteLog("GetAllElements in ElementService", ex.getMessage());
             return null;
         }
     }
     @Override
     public void AddNewElement(NewElementModel element){
-        boolean isAdded = _elementRepository.CreateNewElement(element);
-
-        if(!isAdded){
-            System.out.println("Element " + element.code + "was not added, error occurred.");
+        try{
+            boolean isAdded = _elementRepository.CreateNewElement(element);
+            if(!isAdded){
+                _errorLogRepository.WriteLog("AddNewElement in ElementService", "Didn't add new element");
+            }
+        }
+        catch(Exception ex){
+            _errorLogRepository.WriteLog("AddNewElement in ElementService", ex.getMessage());
         }
     }
     @Override
@@ -46,13 +52,19 @@ public class ElementServiceImpl implements ElementService {
             return _mappingElements.MappingElementEntityToModel(element.get(0));
         }
         catch(Exception ex){
-            System.out.println("Couldn't get all elements, ERR: " + ex.getMessage());
+            _errorLogRepository.WriteLog("GetOneElement in ElementService", ex.getMessage());
             return null;
         }
     }
     @Override
     public void UpdateElement(ElementModel element){
-        _elementRepository.UpdateElement(_mappingElements.MappingElementModelToEntity(element));
+        try{
+            _elementRepository.UpdateElement(_mappingElements.MappingElementModelToEntity(element));
+        }
+        catch(Exception ex){
+            _errorLogRepository.WriteLog("UpdateElement in ElementService", ex.getMessage());
+        }
+
     }
     @Override
     public PageModel GetElementsPage(int page, List<ElementModel> allElements){

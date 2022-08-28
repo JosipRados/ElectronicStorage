@@ -1,5 +1,10 @@
 package electronicstorage.UI.Models;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class ElementModel {
     public long elementId;
     public String code;
