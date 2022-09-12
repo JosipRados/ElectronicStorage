@@ -6,40 +6,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectElementsModel {
-    long ElementId;
-    String ElementQuantity;
-    String ElementCode;
 
-    public long getElementId() {
-        return ElementId;
+    public ElementModel element = new ElementModel();
+    public int elementQuantity;
+
+    public ElementModel getElement() {
+        return element;
     }
 
-    public void setElementId(long elementId) {
-        ElementId = elementId;
+    public void setElement(ElementModel element) {
+        this.element = element;
     }
 
-    public String getElementQuantity() {
-        return ElementQuantity;
+    public int getElementQuantity() {
+        return elementQuantity;
     }
 
-    public void setElementQuantity(String elementQuantity) {
-        ElementQuantity = elementQuantity;
-    }
-
-    public String getElementCode() {
-        return ElementCode;
-    }
-
-    public void setElementCode(String elementCode) {
-        ElementCode = elementCode;
-    }
-
-    @Override
-    public String toString() {
-        return "ProjectElementsModel{" +
-                "ElementId=" + ElementId +
-                ", ElementQuantity='" + ElementQuantity + '\'' +
-                ", ElementCode='" + ElementCode + '\'' +
-                '}';
+    public void setElementQuantity(int elementQuantity) {
+        this.elementQuantity = elementQuantity;
     }
 }

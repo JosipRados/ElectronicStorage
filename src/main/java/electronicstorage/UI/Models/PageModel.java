@@ -1,6 +1,5 @@
 package electronicstorage.UI.Models;
 
-import electronicstorage.Repository.Models.ElementEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

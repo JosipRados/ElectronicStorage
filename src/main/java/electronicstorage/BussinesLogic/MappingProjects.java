@@ -1,16 +1,22 @@
 package electronicstorage.BussinesLogic;
 
-import electronicstorage.Repository.Models.ProjectEntity;
-import electronicstorage.UI.Models.ProjectModel;
+import electronicstorage.BussinesLogic.Models.ProjectElementDataDTO;
+import electronicstorage.BussinesLogic.Models.ProjectDTO;
+import electronicstorage.UI.Models.ProjectElementDataModel;
+import electronicstorage.UI.Models.ProjectDetailsModel;
 
 import java.util.List;
 
 public interface MappingProjects {
-    ProjectModel MappingProjectEntityToModel(ProjectEntity dbProject);
+    ProjectDetailsModel MappingProjectEntityToModel(ProjectDTO dbProject);
 
-    List<ProjectModel> MappingProjectEntityToModel(List<ProjectEntity> dbProjects);
+    List<ProjectDetailsModel> MappingProjectEntityToModel(List<ProjectDTO> dbProjects);
 
-    ProjectEntity MappingProjectModelToEntity(ProjectModel project);
+    ProjectDTO MappingProjectModelToEntity(ProjectDetailsModel project);
 
-    List<ProjectEntity> MappingProjectModelToEntity(List<ProjectModel> projects);
+    List<ProjectDTO> MappingProjectModelToEntity(List<ProjectDetailsModel> projects);
+
+    ProjectElementDataModel MappingProjectElementDataDTOToModel(ProjectElementDataDTO newElementDTO);
+
+    ProjectElementDataDTO MappingProjectElementDataModelToDTO(ProjectElementDataModel newElement);
 }

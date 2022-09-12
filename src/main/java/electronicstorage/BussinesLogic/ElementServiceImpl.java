@@ -1,7 +1,6 @@
 package electronicstorage.BussinesLogic;
 
 import electronicstorage.Repository.ErrorLogRepository;
-import electronicstorage.Repository.Models.ElementEntity;
 import electronicstorage.UI.Models.ElementModel;
 import electronicstorage.UI.Models.NewElementModel;
 import electronicstorage.UI.Models.PageModel;
@@ -9,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import electronicstorage.Repository.ElementRepository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +21,7 @@ public class ElementServiceImpl implements ElementService {
     @Override
     public List<ElementModel> GetAllElements(){
         try{
-            List<ElementEntity> dbElements = ReturnElementList(_elementRepository.GetAllElements());
-            return _mappingElements.MappingElementEntityToModel(dbElements);
+            return _mappingElements.MappingElementEntityToModel(_elementRepository.GetAllElements());
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("GetAllElements in ElementService", ex.getMessage());
@@ -46,10 +42,8 @@ public class ElementServiceImpl implements ElementService {
     }
     @Override
     public ElementModel GetOneElement(long id){
-        ResultSet result = _elementRepository.GetOneElement(id);
         try{
-            List<ElementEntity> element = ReturnElementList(_elementRepository.GetOneElement(id));
-            return _mappingElements.MappingElementEntityToModel(element.get(0));
+            return _mappingElements.MappingElementEntityToModel(_elementRepository.GetOneElement(id));
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("GetOneElement in ElementService", ex.getMessage());
@@ -118,21 +112,4 @@ public class ElementServiceImpl implements ElementService {
         return filteredList;
     }
 
-    private List<ElementEntity> ReturnElementList(ResultSet result) throws SQLException {
-        List<ElementEntity> allElements = new ArrayList<>();
-
-        while(result.next()) {
-            ElementEntity currentElement = new ElementEntity();
-            currentElement.elementId = result.getLong("ELE_Id");
-            currentElement.code = result.getString("ELE_Code");
-            currentElement.value = result.getString("ELE_Value");
-            currentElement.unit = result.getString("ELE_Unit");
-            currentElement.type = result.getString("ELE_Type");
-            currentElement.size = result.getString("ELE_Size");
-            currentElement.comment = result.getString("ELE_Comment");
-            allElements.add(currentElement);
-        }
-
-        return allElements;
-    }
 }

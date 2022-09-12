@@ -1,18 +1,27 @@
 package electronicstorage.Repository;
 
-import electronicstorage.Repository.Models.ProjectEntity;
+import electronicstorage.BussinesLogic.Models.ProjectElementDataDTO;
+import electronicstorage.BussinesLogic.Models.ProcedureResponseDTO;
+import electronicstorage.BussinesLogic.Models.ProjectDTO;
+import electronicstorage.BussinesLogic.Models.ProjectElementsDTO;
 import electronicstorage.UI.Models.NewProjectModel;
 
-import java.sql.ResultSet;
+import java.util.List;
 
 public interface ProjectRepository {
-    ResultSet GetAllProjects();
+    List<ProjectDTO> GetAllProjects();
 
-    ResultSet GetOneProject(long id);
+    ProjectDTO GetOneProject(long id);
 
     boolean CreateNewProject(NewProjectModel project);
 
-    boolean UpdateProject(ProjectEntity project);
+    boolean UpdateProject(ProjectDTO project);
 
-    ResultSet GetElementsOfProject(long id);
+    List<ProjectElementsDTO> GetElementsOfProject(long id);
+
+    ProcedureResponseDTO CheckExistingElement(String elementCode);
+
+    ProcedureResponseDTO AddNewElementToProject(ProjectElementDataDTO newElement);
+
+    ProcedureResponseDTO UpdateProjectElement(ProjectElementDataDTO currentElement);
 }

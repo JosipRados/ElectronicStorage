@@ -1,4 +1,4 @@
-package electronicstorage.Repository.Models;
+package electronicstorage.BussinesLogic.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectEntity {
+public class ProjectDTO {
     public long id;
     public String name;
     public String company;

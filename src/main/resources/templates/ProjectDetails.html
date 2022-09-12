@@ -15,31 +15,110 @@
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 </head>
 <body>
-<div class="container">
-  <div class="row">
+  <div class="container">
+    <div class="row">
 
+    </div>
+    <h1 th:text="${project.getProjectDetails().getName()}"></h1>
+    <div class="row">
+      <h3 th:text="${project.getProjectDetails().getCompany()}"></h3>
+      <p class="text-danger" th:if="${!errorMessage.isEmpty()}" th:text="${errorMessage}"></p>
+      <button type="button" class="btn btn-sm btn-primary mb-1 col-2" data-bs-toggle="modal" data-bs-target="#addNewProjectElement" data-bs-whatever="@mdo">Add Element</button>
+    </div>
+
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+      <tr>
+        <th>Element Code</th>
+        <th>Element Value</th>
+        <th>Element Quantity</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="projectElement: ${project.projectElements}">
+        <td th:text="${projectElement.element.code}"></td>
+        <td th:text="${projectElement.element.value + ' ' + projectElement.element.unit}"></td>
+        <td th:text="${projectElement.elementQuantity}"></td>
+        <td>
+          <button type="button" class="btn btn-sm btn-dark mb-1 col-6" data-bs-toggle="modal" th:attr="data-bs-target='#elementsUpdate'+${projectElement.element.elementId}" data-bs-whatever="@mdo">UPDATE</button>
+        </td>
+
+        <div class="modal fade" th:attr="id=${'elementsUpdate'+projectElement.element.elementId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <form th:action="@{/projects/updateElement}" method="post">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="DetailsLabel">Element</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <div>
+                    <label for="update-project-id" class="col-form-label" hidden="true">Project ID:</label>
+                    <input type="text" class="form-control" id="update-project-id" name="projectId" th:value="${project.getProjectDetails().getId()}" hidden="true">
+                  </div>
+
+                  <div>
+                    <label for="update-element-code" class="col-form-label" hidden="true">Code:</label>
+                    <input type="text" class="form-control" id="update-element-code" name="elementCode" th:value="${projectElement.element.code}" hidden="true">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="update-element-quantity" class="col-form-label">Quantity:</label>
+                    <input type="text" class="form-control" id="update-element-quantity" name="elementQuantity">
+                  </div>
+
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">UPDATE</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </tr>
+      </tbody>
+    </table>
   </div>
-  <table class="table table-striped table-bordered">
-    <thead class="table-dark">
-    <tr>
-      <th>Project Name</th>
-      <th>Company Name</th>
-      <th>Date Added</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td th:text="${project.name}"></td>
-      <td th:text="${project.company}"></td>
-      <td th:text="${project.timeStamp}"></td>
-      <td>
-        <a class="btn btn-warning">DETAILS</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+
+  <div class="modal fade" id="addNewProjectElement" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form th:action="@{/projects/newProjectElement}" method="post">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Project Element</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <label for="project-id" class="col-form-label" hidden="true">Code:</label>
+              <input type="text" class="form-control" id="project-id" name="projectId" th:value="${project.getProjectDetails().getId()}" hidden="true">
+            </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="element-code" class="col-form-label">Code:</label>
+              <input type="text" class="form-control" id="element-code" name="elementCode">
+            </div>
+
+            <div class="mb-3">
+              <label for="element-quantity" class="col-form-label">Quantity:</label>
+              <input type="text" class="form-control" id="element-quantity" name="elementQuantity">
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">SAVE</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 
 </body>
 </html>

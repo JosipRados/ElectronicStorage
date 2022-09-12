@@ -1,19 +1,21 @@
 package electronicstorage.Repository;
 
-import electronicstorage.Repository.Models.ElementEntity;
+import electronicstorage.BussinesLogic.Models.ElementDTO;
 import electronicstorage.UI.Models.NewElementModel;
 
-import java.sql.ResultSet;
+import java.util.List;
 
 
 public interface ElementRepository {
-    ResultSet GetAllElements();
+    List<ElementDTO> GetAllElements();
 
     boolean CreateNewElement(NewElementModel element);
 
-    boolean UpdateElement(ElementEntity element);
+    boolean UpdateElement(ElementDTO element);
 
     boolean DeleteElement(long elementId);
 
-    ResultSet GetOneElement(long elementId);
+    ElementDTO GetOneElement(long elementId);
+
+
 }

@@ -51,9 +51,9 @@
                 <td th:text="${element.size}"></td>
                 <td>
 
-                    <button type="button" class="btn btn-sm btn-primary mb-1 col-2" data-bs-toggle="modal" th:attr="data-bs-target='#elementsDetails'+${element.elementId}" data-bs-whatever="@mdo">DETAILS</button>
+                    <button type="button" class="btn btn-sm btn-primary mb-1 col-4" data-bs-toggle="modal" th:attr="data-bs-target='#elementsDetails'+${element.elementId}" data-bs-whatever="@mdo">DETAILS</button>
 
-                    <button type="button" class="btn btn-sm btn-dark mb-1 col-2" data-bs-toggle="modal" th:attr="data-bs-target='#elementsUpdate'+${element.elementId}" data-bs-whatever="@mdo">UPDATE</button>
+                    <button type="button" class="btn btn-sm btn-dark mb-1 col-6" data-bs-toggle="modal" th:attr="data-bs-target='#elementsUpdate'+${element.elementId}" data-bs-whatever="@mdo">UPDATE</button>
 
                 </td>
                 <div class="modal fade" th:attr="id=${'elementsDetails'+element.elementId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

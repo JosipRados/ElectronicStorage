@@ -1,16 +1,16 @@
 package electronicstorage.BussinesLogic;
 
-import electronicstorage.Repository.Models.ElementEntity;
+import electronicstorage.BussinesLogic.Models.ElementDTO;
 import electronicstorage.UI.Models.ElementModel;
 
 import java.util.List;
 
 public interface MappingElements {
-    ElementModel MappingElementEntityToModel(ElementEntity dbElement);
+    ElementModel MappingElementEntityToModel(ElementDTO dbElement);
 
-    List<ElementModel> MappingElementEntityToModel(List<ElementEntity> dbElements);
+    List<ElementModel> MappingElementEntityToModel(List<ElementDTO> dbElements);
 
-    ElementEntity MappingElementModelToEntity(ElementModel element);
+    ElementDTO MappingElementModelToEntity(ElementModel element);
 
-    List<ElementEntity> MappingElementModelToEntity(List<ElementModel> elements);
+    List<ElementDTO> MappingElementModelToEntity(List<ElementModel> elements);
 }

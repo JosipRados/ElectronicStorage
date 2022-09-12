@@ -1,6 +1,6 @@
 package electronicstorage.BussinesLogic;
 
-import electronicstorage.Repository.Models.ElementEntity;
+import electronicstorage.BussinesLogic.Models.ElementDTO;
 import electronicstorage.UI.Models.ElementModel;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class MappingElementsImpl implements MappingElements {
 
 
     @Override
-    public ElementModel MappingElementEntityToModel(ElementEntity dbElement){
+    public ElementModel MappingElementEntityToModel(ElementDTO dbElement){
         ElementModel element = new ElementModel();
         element.elementId = dbElement.elementId;
         element.code = dbElement.code;
@@ -25,17 +25,17 @@ public class MappingElementsImpl implements MappingElements {
     }
 
     @Override
-    public List<ElementModel> MappingElementEntityToModel(List<ElementEntity> dbElements){
+    public List<ElementModel> MappingElementEntityToModel(List<ElementDTO> dbElements){
         List<ElementModel> elements = new ArrayList<ElementModel>();
-        for(ElementEntity dbElement : dbElements){
+        for(ElementDTO dbElement : dbElements){
             elements.add(MappingElementEntityToModel(dbElement));
         }
         return elements;
     }
 
     @Override
-    public ElementEntity MappingElementModelToEntity(ElementModel element){
-        ElementEntity dbElement = new ElementEntity();
+    public ElementDTO MappingElementModelToEntity(ElementModel element){
+        ElementDTO dbElement = new ElementDTO();
         dbElement.elementId = element.elementId;
         dbElement.code = element.code;
         dbElement.size = element.size;
@@ -47,8 +47,8 @@ public class MappingElementsImpl implements MappingElements {
     }
 
     @Override
-    public List<ElementEntity> MappingElementModelToEntity(List<ElementModel> elements){
-        List<ElementEntity> dbElements = new ArrayList<ElementEntity>();
+    public List<ElementDTO> MappingElementModelToEntity(List<ElementModel> elements){
+        List<ElementDTO> dbElements = new ArrayList<ElementDTO>();
         for(electronicstorage.UI.Models.ElementModel element : elements){
             dbElements.add(MappingElementModelToEntity(element));
         }

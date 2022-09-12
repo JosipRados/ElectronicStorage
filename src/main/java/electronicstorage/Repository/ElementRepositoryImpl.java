@@ -1,12 +1,15 @@
 package electronicstorage.Repository;
 
-import electronicstorage.Repository.Models.ElementEntity;
+import electronicstorage.BussinesLogic.Models.ElementDTO;
 import electronicstorage.UI.Models.NewElementModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -16,13 +19,13 @@ public class ElementRepositoryImpl implements ElementRepository {
 
 
     @Override
-    public ResultSet GetAllElements(){
+    public List<ElementDTO> GetAllElements(){
             CallableStatement newStatement;
             String procedure = "{call spGetElements}";
             try{
                 newStatement = _dataAccessImpl.databaseConnection.prepareCall(procedure);
                 newStatement.execute();
-                return newStatement.getResultSet();
+                return ReturnElementList(newStatement.getResultSet());
             }
             catch(Exception ex){
                 _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ElementRepository", ex.getMessage());
@@ -51,7 +54,7 @@ public class ElementRepositoryImpl implements ElementRepository {
         }
     }
     @Override
-    public boolean UpdateElement(ElementEntity element){
+    public boolean UpdateElement(ElementDTO element){
         CallableStatement newStatement;
         String procedure = "{call spUpdateElement (?, ?, ?, ?, ?, ?, ?)}";
         try{
@@ -89,7 +92,7 @@ public class ElementRepositoryImpl implements ElementRepository {
         }
     }
     @Override
-    public ResultSet GetOneElement(long elementId){
+    public ElementDTO GetOneElement(long elementId){
         CallableStatement newStatement;
         String procedure = "{call spGetElementById (?)}";
         try{
@@ -97,11 +100,29 @@ public class ElementRepositoryImpl implements ElementRepository {
             newStatement.setLong(1, elementId);
 
             newStatement.execute();
-            return newStatement.getResultSet();
+            return ReturnElementList(newStatement.getResultSet()).get(0);
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ElementRepository", ex.getMessage());
             return null;
         }
+    }
+
+    private List<ElementDTO> ReturnElementList(ResultSet result) throws SQLException {
+        List<ElementDTO> allElements = new ArrayList<>();
+
+        while(result.next()) {
+            ElementDTO currentElement = new ElementDTO();
+            currentElement.elementId = result.getLong("ELE_Id");
+            currentElement.code = result.getString("ELE_Code");
+            currentElement.value = result.getString("ELE_Value");
+            currentElement.unit = result.getString("ELE_Unit");
+            currentElement.type = result.getString("ELE_Type");
+            currentElement.size = result.getString("ELE_Size");
+            currentElement.comment = result.getString("ELE_Comment");
+            allElements.add(currentElement);
+        }
+
+        return allElements;
     }
 }

@@ -1,6 +1,5 @@
 package electronicstorage.BussinesLogic;
 
-import electronicstorage.Repository.Models.ElementEntity;
 import electronicstorage.UI.Models.ElementModel;
 import electronicstorage.UI.Models.NewElementModel;
 import electronicstorage.UI.Models.PageModel;

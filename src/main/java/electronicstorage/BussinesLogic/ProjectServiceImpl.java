@@ -1,16 +1,14 @@
 package electronicstorage.BussinesLogic;
 
+import electronicstorage.BussinesLogic.Models.ProcedureResponseDTO;
+import electronicstorage.BussinesLogic.Models.ProjectElementsDTO;
+import electronicstorage.Repository.ElementRepository;
 import electronicstorage.Repository.ErrorLogRepository;
-import electronicstorage.Repository.Models.ElementEntity;
-import electronicstorage.Repository.Models.ProjectEntity;
 import electronicstorage.Repository.ProjectRepository;
-import electronicstorage.UI.Models.ProjectElementsModel;
-import electronicstorage.UI.Models.ProjectModel;
+import electronicstorage.UI.Models.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +19,13 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository _projectRepository;
     private final MappingProjects _mappingProjects;
     private final ErrorLogRepository _errorLogRepository;
+    private final ElementRepository _elementRepository;
+    private final MappingElements _mappingElements;
 
     @Override
-    public List<ProjectModel> GetAllProjects(){
+    public List<ProjectDetailsModel> GetAllProjects(){
         try{
-            List<ProjectEntity> dbProjects = ReturnProjectList(_projectRepository.GetAllProjects());
-            return _mappingProjects.MappingProjectEntityToModel(dbProjects);
+            return _mappingProjects.MappingProjectEntityToModel(_projectRepository.GetAllProjects());
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("GetAllProjects in ProjectService", ex.getMessage());
@@ -35,9 +34,23 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     public ProjectModel GetOneProject(long projectId){
+        ProjectModel project = new ProjectModel();
+        List<ProjectElementsModel> projectElements = new ArrayList<ProjectElementsModel>();
         try{
-            List<ProjectEntity> project = ReturnProjectList(_projectRepository.GetOneProject(projectId));
-            return _mappingProjects.MappingProjectEntityToModel(project.get(0));
+            project.setProjectDetails(_mappingProjects.MappingProjectEntityToModel(_projectRepository.GetOneProject(projectId)));
+
+            List<ProjectElementsDTO> elementsList = _projectRepository.GetElementsOfProject(projectId);
+
+            for(ProjectElementsDTO element : elementsList){
+                ProjectElementsModel currentElement = new ProjectElementsModel();
+                currentElement.setElement(_mappingElements.MappingElementEntityToModel(_elementRepository.GetOneElement(element.getElementId())));
+                currentElement.setElementQuantity(element.getQuantity());
+                projectElements.add(currentElement);
+            }
+
+            project.setProjectElements(projectElements);
+
+            return project;
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("GetOneProject in ProjectService", ex.getMessage());
@@ -45,30 +58,31 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
-    /*public ProjectElementsModel GetProjectElements(long projectId){
-        try{
-            List<ProjectElementsModel> projectElements = new ArrayList<ProjectElementsModel>();
-        }
-        catch(Exception ex){
+    public RepositoryResponseModel SaveElementToProject(ProjectElementDataModel newElement){
+        ProcedureResponseDTO repositoryResponse = _projectRepository.CheckExistingElement(newElement.getElementCode());
 
-        }
-
-    }*/
-
-    private List<ProjectEntity> ReturnProjectList(ResultSet result) throws SQLException {
-        List<ProjectEntity> allProjects = new ArrayList<ProjectEntity>();
-
-        while(result.next()) {
-            ProjectEntity currentProject = new ProjectEntity();
-            currentProject.id = result.getLong("PRO_Id");
-            currentProject.name = result.getString("PRO_Name");
-            currentProject.company = result.getString("PRO_Company");
-            currentProject.timeStamp = result.getTime("PRO_TimeStamp");
-            allProjects.add(currentProject);
+        if(!repositoryResponse.isSuccess()){
+            return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
         }
 
-        return allProjects;
+        repositoryResponse = _projectRepository.AddNewElementToProject(_mappingProjects.MappingProjectElementDataModelToDTO(newElement));
+
+        if(!repositoryResponse.isSuccess()){
+            return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
+        }
+
+        return new RepositoryResponseModel(true, "");
     }
 
-    private List<ProjectElementsModel>
+    public RepositoryResponseModel UpdateElementOfProject(ProjectElementDataModel currentElement){
+        ProcedureResponseDTO repositoryResponse = _projectRepository.UpdateProjectElement(
+                _mappingProjects.MappingProjectElementDataModelToDTO(currentElement));
+        if(repositoryResponse.isSuccess())
+            return new RepositoryResponseModel(true, "");
+        else
+            return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
+
+    }
+
+
 }
