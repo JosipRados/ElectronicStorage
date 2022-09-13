@@ -106,6 +106,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
     }
 
+    @Override
     public ProcedureResponseDTO CheckExistingElement(String elementCode){
         CallableStatement newStatement;
         String procedure = "{call spCheckExistingElement (?, ?)}";
@@ -123,9 +124,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ProjectRepository", ex.getMessage());
-            return null;
+            return new ProcedureResponseDTO(false, ex.getMessage());
         }
     }
+
+    @Override
     public ProcedureResponseDTO AddNewElementToProject(ProjectElementDataDTO newElement){
         CallableStatement newStatement;
         String procedure = "{call spAddProjectElement (?, ?, ?, ?)}";
@@ -145,10 +148,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ProjectRepository", ex.getMessage());
-            return null;
+            return new ProcedureResponseDTO(false, ex.getMessage());
         }
     }
 
+    @Override
     public ProcedureResponseDTO UpdateProjectElement(ProjectElementDataDTO currentElement){
         CallableStatement newStatement;
         String procedure = "{call spUpdateProjectElement (?, ?, ?, ?)}";
@@ -168,9 +172,53 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
         catch(Exception ex){
             _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ProjectRepository", ex.getMessage());
-            return null;
+            return new ProcedureResponseDTO(false, ex.getMessage());
         }
     }
+
+    @Override
+    public ProcedureResponseDTO DeleteProjectElement(ProjectElementDataDTO element){
+        CallableStatement newStatement;
+        String procedure = "{call spDeleteProjectElement (?, ?, ?, ?)}";
+        try{
+            newStatement = _dataAccessImpl.databaseConnection.prepareCall(procedure);
+            newStatement.setString(1, element.getElementCode());
+            newStatement.setLong(2, element.getProjectId());
+            newStatement.setInt(3, element.getElementQuantity());
+            newStatement.registerOutParameter(4, Types.NVARCHAR);
+            newStatement.execute();
+            String errorMessage = newStatement.getNString(4);
+            if(errorMessage == null)
+                return new ProcedureResponseDTO(true, "");
+            else
+                return new ProcedureResponseDTO(false, errorMessage);
+
+        }
+        catch(Exception ex){
+            _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ProjectRepository", ex.getMessage());
+            return new ProcedureResponseDTO(false, ex.getMessage());
+        }
+    }
+
+    @Override
+    public ProcedureResponseDTO AddNewProject(ProjectDTO newProject){
+        CallableStatement newStatement;
+        String procedure = "{call spSetNewProject (?, ?)}";
+        try{
+            newStatement = _dataAccessImpl.databaseConnection.prepareCall(procedure);
+            newStatement.setString(1, newProject.name);
+            newStatement.setString(2, newProject.company);
+            newStatement.execute();
+
+            return new ProcedureResponseDTO(true, "");
+
+        }
+        catch(Exception ex){
+            _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ProjectRepository", ex.getMessage());
+            return new ProcedureResponseDTO(false, ex.getMessage());
+        }
+    }
+
 
     private List<ProjectDTO> ReturnProjectList(ResultSet result) throws SQLException {
         List<ProjectDTO> allProjects = new ArrayList<ProjectDTO>();
@@ -186,6 +234,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         return allProjects;
     }
+
 
     private List<ProjectElementsDTO> ReturnProjectElementsList(ResultSet result) throws SQLException {
         List<ProjectElementsDTO> projectElements = new ArrayList<ProjectElementsDTO>();

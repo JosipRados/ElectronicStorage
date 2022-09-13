@@ -33,6 +33,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
+    @Override
     public ProjectModel GetOneProject(long projectId){
         ProjectModel project = new ProjectModel();
         List<ProjectElementsModel> projectElements = new ArrayList<ProjectElementsModel>();
@@ -58,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
+    @Override
     public RepositoryResponseModel SaveElementToProject(ProjectElementDataModel newElement){
         ProcedureResponseDTO repositoryResponse = _projectRepository.CheckExistingElement(newElement.getElementCode());
 
@@ -74,6 +76,7 @@ public class ProjectServiceImpl implements ProjectService {
         return new RepositoryResponseModel(true, "");
     }
 
+    @Override
     public RepositoryResponseModel UpdateElementOfProject(ProjectElementDataModel currentElement){
         ProcedureResponseDTO repositoryResponse = _projectRepository.UpdateProjectElement(
                 _mappingProjects.MappingProjectElementDataModelToDTO(currentElement));
@@ -82,6 +85,26 @@ public class ProjectServiceImpl implements ProjectService {
         else
             return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
 
+    }
+
+    @Override
+    public RepositoryResponseModel DeleteElementOfProject(ProjectElementDataModel element){
+        ProcedureResponseDTO repositoryResponse = _projectRepository.DeleteProjectElement(
+                _mappingProjects.MappingProjectElementDataModelToDTO(element));
+        if(repositoryResponse.isSuccess())
+            return new RepositoryResponseModel(true, "");
+        else
+            return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
+    }
+
+    @Override
+    public RepositoryResponseModel AddNewProject(NewProjectModel newProject){
+        ProcedureResponseDTO repositoryResponse = _projectRepository.AddNewProject(
+                _mappingProjects.MappingNewProjectModelToProjectDTO(newProject));
+        if(repositoryResponse.isSuccess())
+            return new RepositoryResponseModel(true, "");
+        else
+            return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
     }
 
 

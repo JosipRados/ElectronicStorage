@@ -23,6 +23,10 @@ public class ElementController {
         _elementService = elementService;
     }
 
+    @GetMapping("/")
+    public String main(){
+        return "Index";
+    }
     @GetMapping("/elements")
     public String listElements(Model model){
         _allElements = _elementService.GetAllElements();

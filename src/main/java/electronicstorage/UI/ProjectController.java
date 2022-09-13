@@ -2,10 +2,7 @@ package electronicstorage.UI;
 
 import electronicstorage.BussinesLogic.ElementService;
 import electronicstorage.BussinesLogic.ProjectService;
-import electronicstorage.UI.Models.ProjectElementDataModel;
-import electronicstorage.UI.Models.ProjectDetailsModel;
-import electronicstorage.UI.Models.ProjectModel;
-import electronicstorage.UI.Models.RepositoryResponseModel;
+import electronicstorage.UI.Models.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,5 +62,21 @@ public class ProjectController {
         isSuccess = response.isSucces();
         errorMessage = response.getErrorMessage();
         return "redirect:/projects/" + newElement.getProjectId();
+    }
+
+    @PostMapping("/projects/deleteElement")
+    public String deleteProjectElement(ProjectElementDataModel element){
+        RepositoryResponseModel response = _projectService.DeleteElementOfProject(element);
+        isSuccess = response.isSucces();
+        errorMessage = response.getErrorMessage();
+        return "redirect:/projects/" + element.getProjectId();
+    }
+
+    @PostMapping("/projects/newProject")
+    public String addNewProject(NewProjectModel newProject){
+        RepositoryResponseModel response = _projectService.AddNewProject(newProject);
+        isSuccess = response.isSucces();
+        errorMessage = response.getErrorMessage();
+        return "redirect:/projects";
     }
 }

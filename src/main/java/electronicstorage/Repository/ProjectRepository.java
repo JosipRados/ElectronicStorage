@@ -24,4 +24,8 @@ public interface ProjectRepository {
     ProcedureResponseDTO AddNewElementToProject(ProjectElementDataDTO newElement);
 
     ProcedureResponseDTO UpdateProjectElement(ProjectElementDataDTO currentElement);
+
+    ProcedureResponseDTO DeleteProjectElement(ProjectElementDataDTO element);
+
+    public ProcedureResponseDTO AddNewProject(ProjectDTO newProject);
 }
