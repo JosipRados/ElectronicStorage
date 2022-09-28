@@ -16,4 +16,6 @@ public interface ProjectService {
     RepositoryResponseModel DeleteElementOfProject(ProjectElementDataModel element);
 
     RepositoryResponseModel AddNewProject(NewProjectModel newProject);
+
+    ProjectAvailabilityModel CheckProjectElementsAvailability(long projectId, String projectName, long projectQuantity);
 }

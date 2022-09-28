@@ -1,5 +1,7 @@
 package electronicstorage.BussinesLogic;
 
+import electronicstorage.BussinesLogic.Models.ElementAvailabilityDTO;
+import electronicstorage.BussinesLogic.Models.ElementDTO;
 import electronicstorage.BussinesLogic.Models.ProcedureResponseDTO;
 import electronicstorage.BussinesLogic.Models.ProjectElementsDTO;
 import electronicstorage.Repository.ElementRepository;
@@ -105,6 +107,42 @@ public class ProjectServiceImpl implements ProjectService {
             return new RepositoryResponseModel(true, "");
         else
             return new RepositoryResponseModel(false, repositoryResponse.getErrorMessage());
+    }
+
+    @Override
+    public ProjectAvailabilityModel CheckProjectElementsAvailability(long projectId, String projectName, long projectQuantity){
+        ProjectAvailabilityModel projectAvailability = new ProjectAvailabilityModel();
+        List<ElementAvailabilityModel> elementAvailabilityModel = new ArrayList<ElementAvailabilityModel>();
+
+        projectAvailability.setProjectId(projectId);
+        projectAvailability.setProjectName(projectName);
+
+        List<ProjectElementsDTO> elementsList = _projectRepository.GetElementsOfProject(projectId);
+
+        for(ProjectElementsDTO element : elementsList){
+            ElementDTO currentElement = _elementRepository.GetOneElement(element.getElementId());
+            ElementAvailabilityDTO elementAvailabilityRepo = _projectRepository.GetAvailableQuantityOfElement(currentElement.code);
+            ElementAvailabilityModel elementAvailability = new ElementAvailabilityModel();
+
+            elementAvailability.setElementRequiredQuantity(element.getQuantity() * projectQuantity);
+
+            if(elementAvailabilityRepo.getProcedureResponse().isSuccess()){
+                elementAvailability.setElementAvailableQuantity(elementAvailabilityRepo.getAvailableQuantity());
+                elementAvailability.setEnough(elementAvailability.getElementAvailableQuantity() >= elementAvailability.getElementRequiredQuantity());
+            }
+            else{
+                elementAvailability.setElementAvailableQuantity(0);
+                elementAvailability.setEnough(false);
+            }
+
+            elementAvailability.setElementId(currentElement.getElementId());
+            elementAvailability.setElementCode(currentElement.getCode());
+
+            elementAvailabilityModel.add(elementAvailability);
+        }
+
+        projectAvailability.setProjectElements(elementAvailabilityModel);
+        return projectAvailability;
     }
 
 

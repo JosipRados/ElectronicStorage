@@ -1,9 +1,6 @@
 package electronicstorage.Repository;
 
-import electronicstorage.BussinesLogic.Models.ProjectElementDataDTO;
-import electronicstorage.BussinesLogic.Models.ProcedureResponseDTO;
-import electronicstorage.BussinesLogic.Models.ProjectDTO;
-import electronicstorage.BussinesLogic.Models.ProjectElementsDTO;
+import electronicstorage.BussinesLogic.Models.*;
 import electronicstorage.UI.Models.NewProjectModel;
 
 import java.util.List;
@@ -27,5 +24,7 @@ public interface ProjectRepository {
 
     ProcedureResponseDTO DeleteProjectElement(ProjectElementDataDTO element);
 
-    public ProcedureResponseDTO AddNewProject(ProjectDTO newProject);
+    ProcedureResponseDTO AddNewProject(ProjectDTO newProject);
+
+    ElementAvailabilityDTO GetAvailableQuantityOfElement(String elementCode);
 }

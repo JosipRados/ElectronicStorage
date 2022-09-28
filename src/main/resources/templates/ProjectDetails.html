@@ -24,6 +24,7 @@
       <h3 th:text="${project.getProjectDetails().getCompany()}"></h3>
       <p class="text-danger" th:if="${!errorMessage.isEmpty()}" th:text="${errorMessage}"></p>
       <button type="button" class="btn btn-sm btn-primary mb-1 col-3" data-bs-toggle="modal" data-bs-target="#addNewProjectElement" data-bs-whatever="@mdo">Add Element</button>
+      <button type="button" class="btn btn-sm btn-primary mb-1 col-3" data-bs-toggle="modal" data-bs-target="#checkAvailability" data-bs-whatever="@mdo">Check Project Availability</button>
       <a th:href="@{/projects/}" class=""><-Back</a>
     </div>
 
@@ -128,7 +129,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">New Project Element</h5>
+            <h5 class="modal-title" id="exampleModalLabelNewElement">New Project Element</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -155,8 +156,45 @@
           </div>
         </div>
       </div>
+      </div>
     </form>
   </div>
+
+  <div class="modal fade" id="checkAvailability" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form th:action="@{/projects/checkAvailability}" method="get">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabelAvailable">New Project Element</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <label for="project-available-id" class="col-form-label" hidden="true">Code:</label>
+              <input type="text" class="form-control" id="project-available-id" name="projectId" th:value="${project.getProjectDetails().getId()}" hidden="true">
+            </div>
+
+            <div>
+              <label for="project-available-name" class="col-form-label" hidden="true">Code:</label>
+              <input type="text" class="form-control" id="project-available-name" name="projectName" th:value="${project.getProjectDetails().getName()}" hidden="true">
+            </div>
+
+            <div class="mb-3">
+              <label for="element-quantity-available" class="col-form-label">Quantity:</label>
+              <input type="text" class="form-control" id="element-quantity-available" name="quantity">
+            </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">SAVE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
 
 </body>
 </html>

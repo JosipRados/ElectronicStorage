@@ -79,4 +79,15 @@ public class ProjectController {
         errorMessage = response.getErrorMessage();
         return "redirect:/projects";
     }
+
+    @GetMapping("/projects/checkAvailability")
+    public String checkElementAvailability(Model model,
+                                           long projectId,
+                                           String projectName,
+                                           long quantity){
+        ProjectAvailabilityModel projectAvailability = _projectService.CheckProjectElementsAvailability(projectId, projectName, quantity);
+        model.addAttribute("Availability", projectAvailability);
+        return "ElementsAvailability";
+    }
+
 }

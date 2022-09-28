@@ -1,9 +1,7 @@
 package electronicstorage.Repository;
 
-import electronicstorage.BussinesLogic.Models.ProjectElementDataDTO;
-import electronicstorage.BussinesLogic.Models.ProcedureResponseDTO;
-import electronicstorage.BussinesLogic.Models.ProjectDTO;
-import electronicstorage.BussinesLogic.Models.ProjectElementsDTO;
+import electronicstorage.BussinesLogic.Models.*;
+import electronicstorage.UI.Models.ElementAvailabilityModel;
 import electronicstorage.UI.Models.NewProjectModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -219,6 +217,36 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
     }
 
+    @Override
+    public ElementAvailabilityDTO GetAvailableQuantityOfElement(String elementCode){
+        ElementAvailabilityDTO elementAvailability = new ElementAvailabilityDTO();
+        CallableStatement newStatement;
+        String procedure = "{call spGetAvailableQuantity (?, ?, ?)}";
+        try{
+            newStatement = _dataAccessImpl.databaseConnection.prepareCall(procedure);
+            newStatement.setString(1, elementCode);
+            newStatement.registerOutParameter(2, Types.BIGINT);
+            newStatement.registerOutParameter(3, Types.NVARCHAR);
+            newStatement.execute();
+
+            String errorMessage = newStatement.getNString(3);
+            if(errorMessage == null){
+                elementAvailability.setAvailableQuantity(newStatement.getLong(2));
+                elementAvailability.setProcedureResponse(new ProcedureResponseDTO(true, ""));
+            }
+            else{
+                elementAvailability.setAvailableQuantity(0);
+                elementAvailability.setProcedureResponse(new ProcedureResponseDTO(false, errorMessage));
+            }
+
+            return elementAvailability;
+
+        }
+        catch(Exception ex){
+            _errorLogRepository.WriteLog("Couldn't execute " + procedure + " in ProjectRepository", ex.getMessage());
+            return null;
+        }
+    }
 
     private List<ProjectDTO> ReturnProjectList(ResultSet result) throws SQLException {
         List<ProjectDTO> allProjects = new ArrayList<ProjectDTO>();
