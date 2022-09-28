@@ -23,6 +23,9 @@
 </head>
 <body>
 <div class="container">
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout" />
+    </form>
     <h1 class="d-flex justify-content-center">Electronic Storage</h1>
     <div class="row d-flex justify-content-center">
         <a class="btn btn-primary mb-3 col-4" th:href="@{/elements/}">ELEMENTS</a>
